@@ -1,0 +1,142 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+MyManager:
+    MainScreen:
+    TracksScreen:
+    StatisticsScreen:
+    SettingsScreen:
+    NotesScreen:
+    PlayingScreen:
+
+<MyManager>:
+    id: 'manage'
+    transition: FadeTransition()
+
+<MainScreen>:
+    name: "main"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Listening App v.0.0.1"
+            left_action_items: [['menu']]
+
+        MDGridLayout:
+            cols: 2
+            MDCard:
+                ripple_behavior: True
+                size_hint: .7, .4
+                md_bg_color: "darkgrey"
+                on_touch_down: root.manager.current='tracks'
+                MDLabel:
+                    text: "Tracks"
+                    halign: 'center'
+
+            MDCard:
+                ripple_behavior: True
+                md_bg_color: "lightblue"
+                on_touch_down: root.manager.current='stats'
+                MDLabel:
+                    text: "Statistics"
+                    halign: 'center'
+            MDCard:
+                ripple_behavior: True
+                md_bg_color: "#8D8DB9"
+                on_touch_down: root.manager.current='notes'
+                MDLabel:
+                    text: "Notes"
+                    halign: 'center'
+            MDCard:
+                ripple_behavior: True
+                md_bg_color: "pink"
+                style: 'outlined'
+                on_touch_down: root.manager.current='settings'
+                MDLabel:
+                    text: "Settings"
+                    halign: 'center'
+
+
+<TracksScreen>:
+    name: 'tracks'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Tracklist"
+            left_action_items: [['menu']]
+            right_action_items: [["home", lambda x: x]]
+        MyRecycleView:
+            viewclass: 'Label'
+            RecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                data: ['king', 'queen', 'local','hiphop']
+
+
+
+<StatisticsScreen>:
+    name: 'stats'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Statistics"
+            left_action_items: [['menu']]
+            right_action_items: [["home", lambda x: x]]
+        MDGridLayout:
+            cols: 2
+            MDLabel:
+                text: "Notes"
+            MDLabel:
+                text: "Notes"
+            MDLabel:
+                text: "Notes"
+            MDLabel:
+                text: "Notes"
+            MDLabel:
+                text: "Notes"
+            MDLabel:
+                text: "Notes"
+
+<SettingsScreen>:
+    name: 'settings'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Settings"
+            left_action_items: [['menu']]
+            right_action_items: [["home", lambda x: x]]
+
+<NotesScreen>:
+    name: 'notes'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Notes"
+            left_action_items: [['menu']]
+            right_action_items: [["home", lambda x: x]]
+        MDLabel:
+            text: "Enter your notes in the text field below."
+        MDTextField:
+            mode: 'rectangle'
+            multiline: True
+            size_hint: 0.8, 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+        MDRaisedButton:
+            id: submit_note
+            text: 'Submit'
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+
+
+<PlayingScreen>:
+    name: 'playing'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDTopAppBar:
+            title: "Now Playing"
+            left_action_items: [['menu']]
+            right_action_items: [["home", lambda x: x]]
+
+
+<MyRecycleView>:

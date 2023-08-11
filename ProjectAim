@@ -1,0 +1,13 @@
+To create a mobile application that allows user to upload audio files of journal articles to listen
+to on the go.
+
+# Requirements
+1. VideoPlayer
+2. list view of files available on phone - name, number of complete plays
+3. Menu - Name, Dashboard, Settings
+4. Edit details
+5. Close file
+
+
+
+
