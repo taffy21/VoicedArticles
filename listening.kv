@@ -1,19 +1,23 @@
-#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#: import NoTransition kivy.uix.screenmanager.NoTransition
 
 MyManager:
     MainScreen:
+    TracksFolderScreen:
     TracksScreen:
     StatisticsScreen:
     SettingsScreen:
-    NotesScreen:
+    NewNotesScreen:
+    NotesListScreen:
+    ReadNotesScreen:
     PlayingScreen:
 
 <MyManager>:
     id: 'manage'
-    transition: FadeTransition()
+    transition: NoTransition()
 
 <MainScreen>:
     name: "main"
+    id: 'one'
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
@@ -26,7 +30,7 @@ MyManager:
                 ripple_behavior: True
                 size_hint: .7, .4
                 md_bg_color: "darkgrey"
-                on_touch_down: root.manager.current='tracks'
+                on_touch_down: root.manager.current='folder'
                 MDLabel:
                     text: "Tracks"
                     halign: 'center'
@@ -50,73 +54,122 @@ MyManager:
                 md_bg_color: "pink"
                 style: 'outlined'
                 on_touch_down: root.manager.current='settings'
+                images: '/images/cog3.png'
                 MDLabel:
                     text: "Settings"
                     halign: 'center'
 
 
+<TracksFolderScreen>:
+    name: 'folder'
+    id: 'nine'
+
+
+
 <TracksScreen>:
     name: 'tracks'
+    id: 'two'
+
+
+
+<PlayingScreen>:
+    name: 'playing'
+    id:'six'
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
-            title: "Tracklist"
+            title: "Now Playing"
             left_action_items: [['menu']]
-            right_action_items: [["home", lambda x: x]]
-        MyRecycleView:
-            viewclass: 'Label'
-            RecycleBoxLayout:
-                default_size: None, dp(56)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-                data: ['king', 'queen', 'local','hiphop']
+            right_action_items: [["home", lambda x: app.callback(x)], ['arrow-left-circle', lambda x: root.tracklist()]]
+        Image:
+            source: 'images/music.png'
+            size_hint: 0.4,0.5
+            pos_hint: {'center_x':0.5, 'center_y':0.8}
+        MDLabel:
+            text: 'Track Name'
+            md_bg_color: '#FF9EAA'
+            bold: True
+            font_size: '25sp'
+            size_hint_y: 0.1
+        Slider:
+            id: progress
+            min: 0
+            max: 100
+            value: 0
+            cursor_size: (dp(15), dp(15))
+            size_hint_y: 0.1
 
+        MDGridLayout:
+            cols: 5
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+            size_hint_y: 0.1
+            size_hint_x: 0.78
+            canvas:
+                Color:
+                    rgba: 0,0.8,0.8,1
+                Rectangle:
+                    size: [400, 100]
+            MyIcon:
+                icon: 'restart'
+            MyIcon:
+                icon: 'skip-previous-circle-outline'
+            MyIcon:
+                icon: 'play-circle-outline'
+            MyIcon:
+                icon: 'skip-next-circle-outline'
+            MyIcon:
+                icon: 'stop-circle-outline'
+
+        MDLabel:
+            text:""
+            size_hint_y:0.2
+
+<MyIcon@MDIconButton>:
+    color: [.7, 0, 0, 1]
+    size_hint: None, None
+    user_font_size: dp(40)
+    theme_text_color: 'Custom'
+    size: (dp(40), dp(40))
+    text_color: [0,0,0,1]
 
 
 <StatisticsScreen>:
     name: 'stats'
-    MDBoxLayout:
-        orientation: "vertical"
-        MDTopAppBar:
-            title: "Statistics"
-            left_action_items: [['menu']]
-            right_action_items: [["home", lambda x: x]]
-        MDGridLayout:
-            cols: 2
-            MDLabel:
-                text: "Notes"
-            MDLabel:
-                text: "Notes"
-            MDLabel:
-                text: "Notes"
-            MDLabel:
-                text: "Notes"
-            MDLabel:
-                text: "Notes"
-            MDLabel:
-                text: "Notes"
+    id:'three'
+
 
 <SettingsScreen>:
     name: 'settings'
+    id: 'four'
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "Settings"
             left_action_items: [['menu']]
-            right_action_items: [["home", lambda x: x]]
+            right_action_items: [["home", lambda x: app.callback(x)]]
 
-<NotesScreen>:
+<NewNotesScreen>:
     name: 'notes'
+    id: 'five'
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "Notes"
             left_action_items: [['menu']]
-            right_action_items: [["home", lambda x: x]]
+            right_action_items: [["home", lambda x: app.callback(x)], ["book", lambda x: root.reader()]]
         MDLabel:
             text: "Enter your notes in the text field below."
+            halign: 'center'
+            md_bg_color:'#008080'
+            theme_text_color: "Custom"
+            text_color:"#FFFFFF"
+            bold: True
+        MDTextField:
+            mode: 'rectangle'
+            hint_text: 'Topic'
+            size_hint: 0.8, 1
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: 50, 50
         MDTextField:
             mode: 'rectangle'
             multiline: True
@@ -128,15 +181,41 @@ MyManager:
             pos_hint: {"center_x": .5, "center_y": .5}
 
 
-
-<PlayingScreen>:
-    name: 'playing'
+<ReadNotesScreen>:
+    name: 'read'
+    id: 'seven'
     MDBoxLayout:
-        orientation: "vertical"
+        orientation: 'vertical'
         MDTopAppBar:
-            title: "Now Playing"
+            title: "Read Notes"
             left_action_items: [['menu']]
-            right_action_items: [["home", lambda x: x]]
+            right_action_items: [["home", lambda x: app.callback(x)], ["pencil", lambda x: root.editor()],['arrow-left-circle', lambda x: root.notelist()]]
+        MDBoxLayout:
+            orientation: 'vertical'
+
+            MDLabel:
+                text: "Date"
+                font_style: 'H6'
+                md_bg_color: '#008080'
+                theme_text_color: "Custom"
+                text_color:"#FFFFFF"
+                size_hint_y: 0.1
+            MDLabel:
+                text: 'Text Contxt'
+                font_style: 'Subtitle1'
+                md_bg_color: '#FF9EAA'
+                bold: True
+                size_hint_y: 0.1
+            MDLabel:
+                text: 'Overall text here '
+                valign: 'top'
+                text_size: self.size
+                font_style: 'Body1'
+                size_hint_y: 0.8
 
 
-<MyRecycleView>:
+<NotesListScreen>:
+    name:'noteslist'
+    id:'eight'
+
+
